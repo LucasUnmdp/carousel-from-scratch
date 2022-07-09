@@ -6,6 +6,7 @@ const nextButton = d.querySelector('.carousel-button-right');
 const prevButton = d.querySelector('.carousel-button-left');
 const dotsNav = d.querySelector('.carousel-nav');
 const dots = Array.from(dotsNav.children);
+let id = autoSlide();
 
 const slideWidth = slides[0].getBoundingClientRect().width;
 
@@ -49,6 +50,8 @@ nextButton.addEventListener('click', e => {
     moveToSlide(track, currentSlide, nextSlide);
     updateDots(currentDot, nextDot);
     hideShowArrows(slides, prevButton, nextButton, nextIndex);
+
+    id = autoSlide(id);
 });
 
 prevButton.addEventListener('click', e => {
@@ -61,6 +64,8 @@ prevButton.addEventListener('click', e => {
     moveToSlide(track, currentSlide, prevSlide);
     updateDots(currentDot, prevtDot);
     hideShowArrows(slides, prevButton, nextButton, prevIndex);
+
+    id = autoSlide(id);
 });
 
 dotsNav.addEventListener('click', e => {
@@ -76,4 +81,20 @@ dotsNav.addEventListener('click', e => {
     moveToSlide(track, currentSlide, targetSlide);
     updateDots(currentDot, targetDot);
     hideShowArrows(slides, prevButton, nextButton, targetIndex);
+
+    id = autoSlide(id);
 });
+
+function executeAsync(func) {
+    return setTimeout(func, 3000);
+}
+
+function autoSlide(id) {
+    clearTimeout(id);
+    return executeAsync(function() {
+        const currentSlide = track.querySelector('.current-slide');
+        const nextSlide = currentSlide.nextElementSibling;
+        if (nextSlide != null)
+            nextButton.click();
+    });
+}
