@@ -15,8 +15,7 @@ const setSlidePosition = (slide, index) => {
 };
 slides.forEach(setSlidePosition);
 
-const moveToSlide = (track, currentSlide, targetSlide) => {
-
+const moveToSlide = (currentSlide, targetSlide) => {
     track.style.transform = 'translateX(-' + targetSlide.style.left + ')';
     currentSlide.classList.remove('current-slide');
     targetSlide.classList.add('current-slide');
@@ -27,7 +26,7 @@ const updateDots = (currentDot, targetDot) => {
     targetDot.classList.add('current-slide');
 };
 
-const hideShowArrows = (slides, prevButton, nextButton, targetIndex) => {
+const hideShowArrows = (targetIndex) => {
     if (targetIndex === 0) {
         prevButton.classList.add('is-hidden');
         nextButton.classList.remove('is-hidden');
@@ -47,9 +46,9 @@ nextButton.addEventListener('click', e => {
     const nextDot = currentDot.nextElementSibling;
     const nextIndex = slides.findIndex(slide => slide === nextSlide);
 
-    moveToSlide(track, currentSlide, nextSlide);
+    moveToSlide(currentSlide, nextSlide);
     updateDots(currentDot, nextDot);
-    hideShowArrows(slides, prevButton, nextButton, nextIndex);
+    hideShowArrows(nextIndex);
 
     id = autoSlide(id);
 });
@@ -61,9 +60,9 @@ prevButton.addEventListener('click', e => {
     const prevtDot = currentDot.previousElementSibling;
     const prevIndex = slides.findIndex(slide => slide === prevSlide);
 
-    moveToSlide(track, currentSlide, prevSlide);
+    moveToSlide(currentSlide, prevSlide);
     updateDots(currentDot, prevtDot);
-    hideShowArrows(slides, prevButton, nextButton, prevIndex);
+    hideShowArrows(prevIndex);
 
     id = autoSlide(id);
 });
@@ -78,9 +77,9 @@ dotsNav.addEventListener('click', e => {
     const targetIndex = dots.findIndex(dot => dot === targetDot);
     const targetSlide = slides[targetIndex];
 
-    moveToSlide(track, currentSlide, targetSlide);
+    moveToSlide(currentSlide, targetSlide);
     updateDots(currentDot, targetDot);
-    hideShowArrows(slides, prevButton, nextButton, targetIndex);
+    hideShowArrows(targetIndex);
 
     id = autoSlide(id);
 });
@@ -93,7 +92,7 @@ function autoSlide(id) {
     clearTimeout(id);
     return executeAsync(function() {
         const currentSlide = track.querySelector('.current-slide');
-        const nextSlide = currentSlide.nextElementSibling;
+        const nextSlide = currentSlide;
         if (nextSlide != null)
             nextButton.click();
     });
